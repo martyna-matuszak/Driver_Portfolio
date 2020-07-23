@@ -31,7 +31,7 @@ public class AdviceController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String uploadMultipleFiles(@RequestParam String title, @RequestParam Long fileId, @RequestParam String[] tags){
+    public String addAdvice(@RequestParam String title, @RequestParam Long fileId, @RequestParam String[] tags){
         Advice advice = new Advice();
         advice.setTitle(title);
         fileRepository.findById(fileId).ifPresent(advice::setFile);
