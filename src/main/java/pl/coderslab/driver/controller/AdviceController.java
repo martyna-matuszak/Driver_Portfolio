@@ -46,16 +46,4 @@ public class AdviceController {
         return advice.getTitle() + "    utworzono!!!";
     }
 
-    @GetMapping("/sample")
-    @ResponseBody
-    public String sampleAdv(){
-        Advice advice = new Advice();
-        advice.setTitle("Nowa porada");
-        advice.setFile(fileRepository.findById(1L).get());
-        List<Tag> tags = Arrays.asList(new Tag("bezpieczeństwo"), new Tag("super"));
-        tags.forEach(tagRepository::save);
-        advice.setTags(tags);
-        adviceRepository.save(advice);
-        return advice.getTitle() + "    utworzono!!!";
-    }
 }
