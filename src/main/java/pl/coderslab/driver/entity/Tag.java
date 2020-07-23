@@ -1,5 +1,7 @@
 package pl.coderslab.driver.entity;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,13 @@ public class Tag {
 
     @NotBlank
     private String name;
+
+    public Tag(){
+    }
+
+    public Tag(String name){
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
