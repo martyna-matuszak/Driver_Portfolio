@@ -30,6 +30,8 @@ public class Advice {
     @ManyToOne
     private File file = null;
 
+    private String text;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
 
@@ -89,5 +91,13 @@ public class Advice {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

@@ -14,6 +14,8 @@ public class Answer {
     @NotBlank
     private String text;
 
+    private boolean correct;
+
     @ManyToOne
     private File file = null;
 
@@ -42,5 +44,17 @@ public class Answer {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+
+    public File getFile() {
+        return file;
     }
 }

@@ -16,13 +16,17 @@ public class Quiz {
     @OneToMany
     private List<Answer> answers;
 
-    private Long correctAnswerId;
-
     @ManyToOne
     private File file;
 
+    @ManyToOne
+    private Advice advice;
+
     //===================================================================
 
+    public Optional<File> getFileOpt() {
+        return Optional.of(file);
+    }
 
     public Long getId() {
         return id;
@@ -40,10 +44,6 @@ public class Quiz {
         this.answers = answers;
     }
 
-    public Optional<File> getFileOpt() {
-        return Optional.of(file);
-    }
-
     public void setFile(File file) {
         this.file = file;
     }
@@ -56,11 +56,15 @@ public class Quiz {
         this.question = question;
     }
 
-    public Long getCorrectAnswerId() {
-        return correctAnswerId;
+    public Advice getAdvice() {
+        return advice;
     }
 
-    public void setCorrectAnswerId(Long correctAnswerId) {
-        this.correctAnswerId = correctAnswerId;
+    public void setAdvice(Advice advice) {
+        this.advice = advice;
+    }
+
+    public File getFile() {
+        return file;
     }
 }
