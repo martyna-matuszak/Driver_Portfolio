@@ -57,4 +57,9 @@ public class Answer {
     public File getFile() {
         return file;
     }
+
+    @Override
+    public String toString() {
+        return id +" " + text + " " + correct;
+    }
 }

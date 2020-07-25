@@ -24,6 +24,19 @@ public class Quiz {
 
     //===================================================================
 
+    public Quiz(){
+
+    }
+
+    public Quiz(String question, List<Answer> answers, File file, Advice advice) {
+        this.question = question;
+        this.answers = answers;
+        this.file = file;
+        this.advice = advice;
+    }
+
+    //===================================================================
+
     public Optional<File> getFileOpt() {
         return Optional.of(file);
     }
@@ -66,5 +79,15 @@ public class Quiz {
 
     public File getFile() {
         return file;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(question + "\n");
+        for (Answer answer : answers) {
+            sb.append(answer.toString() + "\n");
+        }
+        return sb.toString();
     }
 }
