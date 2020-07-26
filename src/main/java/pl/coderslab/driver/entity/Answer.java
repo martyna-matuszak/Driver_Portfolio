@@ -38,14 +38,6 @@ public class Answer {
         this.text = text;
     }
 
-    public Optional<File> getFileOpt() {
-        return Optional.of(file);
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public boolean isCorrect() {
         return correct;
     }
@@ -58,8 +50,11 @@ public class Answer {
         return file;
     }
 
-    @Override
-    public String toString() {
-        return id +" " + text + " " + correct;
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public Optional<File> fileOptional(){
+        return Optional.ofNullable(file);
     }
 }

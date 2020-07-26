@@ -16,19 +16,19 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-
-    public Answer save(String text, Boolean correct, Long fileId){
-        Answer answer = new Answer();
-        answer.setText(text);
-        answer.setCorrect(correct);
-        fileRepository.findById(fileId).ifPresent(answer::setFile);
+    public Answer save(Answer answer){
         return answerRepository.save(answer);
     }
 
-    public Answer update(Answer answer, String text, Boolean correct, Long fileId){
-        answer.setText(text);
-        answer.setCorrect(correct);
-        fileRepository.findById(fileId).ifPresent(answer::setFile);
+    public Answer update(Answer answer){
         return answerRepository.save(answer);
+    }
+
+    public Answer getAnswer(Long id) throws Exception {
+        return answerRepository.findById(id).orElseThrow(() -> new Exception("Answer with id: "+ id + " - not found"));
+    }
+
+    public void deleteAnswer(Long id) throws Exception {
+       answerRepository.delete(getAnswer(id));
     }
 }

@@ -1,45 +1,44 @@
 package pl.coderslab.driver.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.driver.converter.AnswerConverter;
+import pl.coderslab.driver.dto.AnswerDto;
 import pl.coderslab.driver.entity.Answer;
-import pl.coderslab.driver.repository.AnswerRepository;
 import pl.coderslab.driver.service.AnswerService;
 
 @RestController
 @RequestMapping("/answer")
 public class AnswerController {
 
-    private final AnswerRepository answerRepository;
     private final AnswerService answerService;
+    private final AnswerConverter answerConverter;
 
-    public AnswerController(AnswerRepository answerRepository, AnswerService answerService) {
-        this.answerRepository = answerRepository;
+    public AnswerController(AnswerService answerService, AnswerConverter answerConverter) {
         this.answerService = answerService;
+        this.answerConverter = answerConverter;
     }
 
     @GetMapping("/{id}")
-    public String getAnswer(@PathVariable Long id) throws Exception {
-        Answer answer = answerRepository.findById(id).orElseThrow(Exception::new);
-        return answer.getText();
+    public AnswerDto getAnswer(@PathVariable Long id) throws Exception {
+        return answerConverter.answerToDto(answerService.getAnswer(id));
     }
 
     @PostMapping
-    public String addAnswer(@RequestParam String text, @RequestParam Boolean correct, @RequestParam Long fileId){
-        Answer answer = answerService.save(text,correct,fileId);
-        return answer.toString();
+    public AnswerDto addAnswer(@RequestBody AnswerDto answerDto){
+        Answer answer = answerService.save(answerConverter.dtoToAnswer(answerDto));
+        return answerConverter.answerToDto(answer);
     }
 
     @PutMapping("/{id}")
-    public String updateAnswer(@PathVariable Long id,@RequestParam String text, @RequestParam Boolean correct, @RequestParam Long fileId) throws Exception {
-        Answer answer = answerRepository.findById(id).orElseThrow(Exception::new);
-        answer = answerService.update(answer,text,correct,fileId);
-        return answer.toString();
+    @ResponseStatus(HttpStatus.OK)
+    public void updateAnswer(@RequestBody AnswerDto answerDto) {
+        answerService.update(answerConverter.dtoToAnswer(answerDto));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAnswer(@PathVariable Long id) throws Exception {
-        Answer answer = answerRepository.findById(id).orElseThrow(Exception::new);
-        answerRepository.delete(answer);
-        return "Answer deleted";
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAnswer(@PathVariable Long id) throws Exception {
+        answerService.deleteAnswer(id);
     }
 }
