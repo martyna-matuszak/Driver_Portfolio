@@ -48,5 +48,9 @@ public class FileStorageService {
         return fileRepository.findAll();
     }
 
+    public void delete(Long id){
+        fileRepository.delete(getFile(id));
+    }
+
 }
 
