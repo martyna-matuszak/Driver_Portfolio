@@ -6,8 +6,8 @@ public class AnswerDto {
 
     private Long id;
     private String text;
-    private boolean correct;
-    private FileDto fileDto;
+    private boolean correct = false;
+    private FileDto fileDto = null;
 
     public Long getId() {
         return id;
