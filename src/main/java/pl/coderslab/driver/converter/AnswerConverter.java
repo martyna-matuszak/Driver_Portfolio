@@ -22,6 +22,7 @@ public class AnswerConverter {
         AnswerDto answerDto = new AnswerDto();
         answerDto.setId(answer.getId());
         answerDto.setCorrect(answer.isCorrect());
+        answerDto.setText(answer.getText());
         answer.fileOptional().ifPresent(file -> answerDto.setFileDto(fileConverter.fileToDto(file)));
         return answerDto;
     }
