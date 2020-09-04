@@ -19,27 +19,8 @@ public class Quiz {
     @ManyToOne
     private File file;
 
-    @ManyToOne
-    private Advice advice;
 
     //===================================================================
-
-    public Quiz(){
-
-    }
-
-    public Quiz(String question, List<Answer> answers, File file, Advice advice) {
-        this.question = question;
-        this.answers = answers;
-        this.file = file;
-        this.advice = advice;
-    }
-
-    //===================================================================
-
-    public Optional<File> getFileOpt() {
-        return Optional.of(file);
-    }
 
     public Long getId() {
         return id;
@@ -57,10 +38,6 @@ public class Quiz {
         this.answers = answers;
     }
 
-    public void setFile(File file) {
-        this.file = file;
-    }
-
     public String getQuestion() {
         return question;
     }
@@ -69,25 +46,15 @@ public class Quiz {
         this.question = question;
     }
 
-    public Advice getAdvice() {
-        return advice;
-    }
-
-    public void setAdvice(Advice advice) {
-        this.advice = advice;
-    }
-
     public File getFile() {
         return file;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(question + "\n");
-        for (Answer answer : answers) {
-            sb.append(answer.toString() + "\n");
-        }
-        return sb.toString();
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public Optional<File> fileOptional(){
+        return Optional.ofNullable(file);
     }
 }

@@ -2,12 +2,10 @@ package pl.coderslab.driver.converter;
 
 import org.springframework.stereotype.Component;
 import pl.coderslab.driver.dto.AnswerDto;
-import pl.coderslab.driver.dto.FileDto;
 import pl.coderslab.driver.entity.Answer;
-import pl.coderslab.driver.entity.File;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class AnswerConverter {
@@ -34,5 +32,17 @@ public class AnswerConverter {
         answer.setCorrect(answerDto.isCorrect());
         answerDto.fileDtoOptional().ifPresent(fileDto -> answer.setFile(fileConverter.dtoToFile(fileDto)));
         return answer;
+    }
+
+    public List<AnswerDto> answersToDtos(List<Answer> answers){
+        List<AnswerDto> answerDtos = new ArrayList<>();
+        answers.forEach(answer -> answerDtos.add(answerToDto(answer)));
+        return answerDtos;
+    }
+
+    public List<Answer> dtosToAnswers(List<AnswerDto> answerDtos){
+        List<Answer> answers = new ArrayList<>();
+        answerDtos.forEach(answerDto -> answers.add(dtoToAnswer(answerDto)));
+        return answers;
     }
 }

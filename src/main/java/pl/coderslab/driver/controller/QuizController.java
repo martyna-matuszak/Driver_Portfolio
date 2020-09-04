@@ -1,49 +1,45 @@
 package pl.coderslab.driver.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.driver.converter.QuizConverter;
+import pl.coderslab.driver.dto.QuizDto;
 import pl.coderslab.driver.entity.Quiz;
-import pl.coderslab.driver.repository.QuizRepository;
 import pl.coderslab.driver.service.QuizService;
 
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
 
-    private final QuizRepository quizRepository;
     private final QuizService quizService;
+    private final QuizConverter quizConverter;
 
-    public QuizController(QuizRepository quizRepository, QuizService quizService) {
-        this.quizRepository = quizRepository;
+    public QuizController(QuizService quizService, QuizConverter quizConverter) {
         this.quizService = quizService;
+        this.quizConverter = quizConverter;
     }
 
     @GetMapping("/{id}")
-    public String getQuiz(@PathVariable Long id) throws Exception {
-        Quiz quiz = quizRepository.findById(id).orElseThrow(Exception::new);
-        return quiz.toString();
+    public QuizDto getQuiz(@PathVariable Long id) throws Exception {
+        return quizConverter.quizToDto(quizService.getQuiz(id));
     }
 
     @PostMapping("")
-    public String addQuiz(@RequestParam String question, @RequestParam Long[] answersIds,
-                          @RequestParam Long fileId, @RequestParam Long adviceId){
-        Quiz quiz = quizService.createQuiz(new Quiz(),question,answersIds,fileId,adviceId);
-        quiz = quizRepository.save(quiz);
-        return "Added: \n" + quiz.toString();
+    public QuizDto addQuiz(@RequestBody QuizDto quizDto){
+        Quiz quiz = quizService.save(quizConverter.dtoToQuiz(quizDto));
+        return quizConverter.quizToDto(quiz);
     }
 
     @PutMapping("/{id}")
-    public String updateQuiz(@PathVariable Long id, @RequestParam String question, @RequestParam Long[] answersIds,
-                             @RequestParam Long fileId, @RequestParam Long adviceId) throws Exception {
-        Quiz quiz = quizRepository.findById(id).orElseThrow(Exception::new);
-        quiz = quizRepository.save(quizService.createQuiz(quiz,question,answersIds,fileId,adviceId));
-        return "Updated: \n" + quiz.toString();
+    @ResponseStatus(HttpStatus.OK)
+    public void updateQuiz(@RequestBody QuizDto quizDto) {
+        Quiz quiz = quizService.update(quizConverter.dtoToQuiz(quizDto));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuiz(@PathVariable Long id) throws Exception {
-        Quiz quiz = quizRepository.findById(id).orElseThrow(Exception::new);
-        quizRepository.delete(quiz);
-        return "Quiz deleted";
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteQuiz(@PathVariable Long id) throws Exception {
+        quizService.deleteQuiz(id);
     }
 
 }
