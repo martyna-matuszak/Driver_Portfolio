@@ -32,7 +32,7 @@ public class QuizController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateQuiz(@RequestBody QuizDto quizDto) {
+    public void updateQuiz(@RequestBody QuizDto quizDto) throws Exception {
         Quiz quiz = quizService.update(quizConverter.dtoToQuiz(quizDto));
     }
 

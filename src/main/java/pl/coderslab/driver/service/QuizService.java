@@ -29,7 +29,8 @@ public class QuizService {
         return quizRepository.save(quiz);
     }
 
-    public Quiz update(Quiz quiz){
+    public Quiz update(Quiz quiz) throws Exception {
+        getQuiz(quiz.getId());
         quiz.setAnswers(quizAnswers(quiz.getAnswers()));
         return quizRepository.save(quiz);
     }

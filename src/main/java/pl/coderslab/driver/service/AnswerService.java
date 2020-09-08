@@ -20,7 +20,8 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public Answer update(Answer answer){
+    public Answer update(Answer answer) throws Exception {
+        getAnswer(answer.getId());
         return answerRepository.save(answer);
     }
 

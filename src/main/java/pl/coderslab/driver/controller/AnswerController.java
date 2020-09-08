@@ -32,7 +32,7 @@ public class AnswerController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateAnswer(@RequestBody AnswerDto answerDto) {
+    public void updateAnswer(@RequestBody AnswerDto answerDto) throws Exception {
         answerService.update(answerConverter.dtoToAnswer(answerDto));
     }
 
