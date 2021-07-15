@@ -5,9 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Entity
 public class Advice {
@@ -19,33 +19,22 @@ public class Advice {
     @DateTimeFormat(pattern = "DD-MM-yyyy")
     private LocalDate created;
 
-    @PrePersist
-    public void prePersist(){
-        setCreated(LocalDate.now());
-    }
-
     @NotBlank
     private String title;
+
+    @Column(columnDefinition = "text")
+    private String text;
 
     @ManyToOne
     private File file = null;
 
-    private String text;
+    @ManyToMany
+    private List<Quiz> quizzes;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
 
-    //=========================================================================
-
-    public Advice(){
-
-    }
-
-    public Advice(@NotBlank String title, File file) {
-        this.title = title;
-        this.file = file;
-    }
-
+    private LocalDateTime adviceOfTheWeek;
 
     //=========================================================================
 
@@ -73,18 +62,6 @@ public class Advice {
         this.title = title;
     }
 
-    public Optional<File> getFileOpt() {
-        return Optional.of(file);
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
     public List<Tag> getTags() {
         return tags;
     }
@@ -99,5 +76,33 @@ public class Advice {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public LocalDateTime getAdviceOfTheWeek() {
+        return adviceOfTheWeek;
+    }
+
+    public void setAdviceOfTheWeek(LocalDateTime adviceOfTheWeek) {
+        this.adviceOfTheWeek = adviceOfTheWeek;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
+    }
+
+    public Optional<File> fileOptional(){
+        return Optional.ofNullable(file);
     }
 }

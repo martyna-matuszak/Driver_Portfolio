@@ -1,49 +1,47 @@
 package pl.coderslab.driver.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.driver.converter.AdviceConverter;
+import pl.coderslab.driver.dto.AdviceDto;
+import pl.coderslab.driver.dto.QuizDto;
 import pl.coderslab.driver.entity.Advice;
-import pl.coderslab.driver.entity.File;
-import pl.coderslab.driver.entity.Tag;
 import pl.coderslab.driver.repository.AdviceRepository;
-import pl.coderslab.driver.repository.FileRepository;
-import pl.coderslab.driver.repository.TagRepository;
+import pl.coderslab.driver.service.AdviceService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-@Controller
+@RestController
 @RequestMapping("/advice")
 public class AdviceController {
 
-    private final FileRepository fileRepository;
-    private final AdviceRepository adviceRepository;
-    private final TagRepository tagRepository;
+    private final AdviceService adviceService;
+    private final AdviceConverter adviceConverter;
 
-    public AdviceController(FileRepository fileRepository, AdviceRepository adviceRepository, TagRepository tagRepository) {
-        this.fileRepository = fileRepository;
-        this.adviceRepository = adviceRepository;
-        this.tagRepository = tagRepository;
+    public AdviceController(AdviceService adviceService, AdviceConverter adviceConverter) {
+        this.adviceService = adviceService;
+        this.adviceConverter = adviceConverter;
     }
 
+    @GetMapping("/{id}")
+    public AdviceDto getAdvice(@PathVariable Long id) throws Exception{
+        return adviceConverter.adviceToDto(adviceService.getAdvice(id));
+    }
 
-    @PostMapping("/add")
-    @ResponseBody
-    public String addAdvice(@RequestParam String title, @RequestParam Long fileId, @RequestParam String[] tags){
-        Advice advice = new Advice();
-        advice.setTitle(title);
-        fileRepository.findById(fileId).ifPresent(advice::setFile);
-        List<Tag> tagList = new ArrayList<>();
-        for (String name : tags){
-            Tag tag = tagRepository.findByName(name).orElse(new Tag(name));
-            tagRepository.save(tag);
-            tagList.add(tag);
-        }
-        advice.setTags(tagList);
-        adviceRepository.save(advice);
-        return advice.getTitle() + "    utworzono!!!";
+    @PostMapping("")
+    public AdviceDto addAdvice(@RequestBody AdviceDto adviceDto){
+        Advice advice = adviceService.save(adviceConverter.dtoToAdvice(adviceDto));
+        return adviceConverter.adviceToDto(advice);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateAdvice(@RequestBody AdviceDto adviceDto) throws Exception{
+        Advice advice = adviceService.update(adviceConverter.dtoToAdvice(adviceDto));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAdvice(@PathVariable Long id) throws Exception {
+        adviceService.deleteAdvice(id);
     }
 
 }
